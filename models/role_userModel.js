@@ -20,8 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         id_role:DataTypes.STRING,
         id_user:DataTypes.STRING,
-        created_at:DataTypes.DATE,
-        updated_at:DataTypes.DATE
     }, {
         sequelize,
         modelName: 'Role_User',

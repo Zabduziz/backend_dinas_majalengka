@@ -12,19 +12,23 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     User.init({
-        id_user:DataTypes.STRING,
+        id_user:{
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+            primaryKey: true
+        },
         nama_lengkap:DataTypes.STRING,
         email:DataTypes.STRING,
         tanggal_lahir:DataTypes.DATE,
         no_telpon:DataTypes.STRING,
         gender:DataTypes.ENUM('Laki-Laki', 'Perempuan'),
-        password_hash:DataTypes.STRING,
-        created_at:DataTypes.DATE,
-        updated_at:DataTypes.DATE
+        password_hash:DataTypes.STRING
     }, {
         sequelize,
         modelName: 'User',
-        tableName: 'user'
+        tableName: 'user',
+        timestamps:true
     })
     return User
 }

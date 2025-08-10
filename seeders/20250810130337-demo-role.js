@@ -6,24 +6,16 @@ module.exports = {
     await queryInterface.bulkInsert('roles', [
       {
         id_role:"dns",
-        role_name:"dinas",
-        created_at: new Date(),
-        updated_at: new Date(),
+        role_name:"dinas"
       }, {
         id_role:"adm_uang",
         role_name:"admin_uang",
-        created_at: new Date(),
-        updated_at: new Date(),
       }, {
         id_role:"adm_wisata",
         role_name:"admin_wisata",
-        created_at: new Date(),
-        updated_at: new Date(),
       }, {
         id_role:"usr",
         role_name:"user",
-        created_at: new Date(),
-        updated_at: new Date(),
       }
     ])
   },

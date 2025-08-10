@@ -18,9 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             'admin_uang',
             'admin_wisata',
             'user'
-        ),
-        created_at:DataTypes.DATE,
-        updated_at:DataTypes.DATE
+        )
     }, {
         sequelize,
         modelName: 'Role',
