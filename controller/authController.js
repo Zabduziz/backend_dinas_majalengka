@@ -1,4 +1,4 @@
-const { User, Role_User } = require('../models')
+const { User, Role_User, Role } = require('../models')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
@@ -32,16 +32,31 @@ const register = async(req, res) => {
 
 //LOGIN
 const login = async(req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     
     try {
-        const user = await User.findOne({ where: { username } });
+        const user = await User.findOne({ 
+            where: { email },
+            include: [
+                {
+                    model: Role,
+                    through: {attributes:[]},
+                    as: 'roles'
+                }
+            ]
+        });
         if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
     
-        const validPassword = await bcrypt.compare(password, user.password);
+        const validPassword = await bcrypt.compare(password, user.password_hash);
         if (!validPassword) return res.status(401).json({ message: "Password salah" });
     
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: "1h" });
+        const payload = {
+            id_user: user.id_user,
+            id_roles: user.roles[0].id_role,
+            nama_lengkap: user.nama_lengkap,
+        }
+
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
     
         res.json({ message: "Login berhasil", token });
     } catch(err) {
