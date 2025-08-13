@@ -12,8 +12,7 @@ module.exports = {
       role_name: {
         type: Sequelize.ENUM(
           'dinas',
-          'admin_uang',
-          'admin_wisata',
+          'pengelola',
           'user'
         ),
         allowNull: false

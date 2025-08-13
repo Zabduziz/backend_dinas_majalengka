@@ -1,56 +1,44 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('user', {
-      id_user: {
+    await queryInterface.createTable('pengelola', {
+      id_pengelola: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false,
         primaryKey: true
       },
-      id_role: {
+      id_user: {
         type: Sequelize.STRING,
-        allowNull:true,
+        allowNull:false,
         references: {
-          model: 'roles',
-          key: 'id_role'
+          model: 'user',
+          key: 'id_user'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      nama_lengkap: {
-        type: Sequelize.STRING,
-        allowNull:false
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull:false,
-        unique:true
-      },
-      tanggal_lahir: {
+      tahun_operasi: {
         type: Sequelize.DATE,
         allowNull:false
       },
-      no_telpon: {
+      url_ktp: {
         type: Sequelize.STRING,
         allowNull:false
       },
-      gender: {
-        type: Sequelize.ENUM('Laki-Laki', 'Perempuan'),
-        allowNull:false
-      },
-      password_hash: {
+      url_npwp: {
         type: Sequelize.STRING,
         allowNull:false
       },
-      reset_password_token: {
+      url_nib: {
         type: Sequelize.STRING,
-        allowNull:true
+        allowNull:false
       },
-      reset_password_expires: {
-        type: Sequelize.DATE,
-        allowNull:true
+      qr_code: {
+        type: Sequelize.STRING,
+        allowNull:false
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -66,6 +54,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('user')
+    await queryInterface.dropTable('pengelola')
   }
 };
