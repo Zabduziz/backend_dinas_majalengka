@@ -39,12 +39,16 @@ const registerWisata = async (req, res) => {
             harga_tiket: body.harga_tiket
         })
 
-        const newGaleriId = await idGenerator.generateGaleriWisataId()
-        const galeriData = filesGambar.map(file => ({
-            id_galery_wisata: newGaleriId,
-            id_wisata: wisata.id_wisata,
-            url_gambar: file.path
-        }))
+        // FIXED: Use Promise.all with async map to generate a unique ID for each image
+        const galeriData = await Promise.all(filesGambar.map(async (file) => {
+            const newGaleriId = await idGenerator.generateGaleriWisataId(); // New ID for each image
+            return {
+                id_galery_wisata: newGaleriId,
+                id_wisata: wisata.id_wisata,
+                url_gambar: file.path
+            };
+        }));
+
         await GaleriWisata.bulkCreate(galeriData)
 
         res.json({

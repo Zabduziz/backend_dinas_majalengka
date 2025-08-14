@@ -56,7 +56,7 @@ const generateGaleriWisataId = async() => {
 
     let nextIdNumber = 1
     if (lastUser) {
-        const lastId = lastUser.id_wisata
+        const lastId = lastUser.id_galery_wisata
         const lastNumber = parseInt(lastId.replace('GLR', ''), 10)
         nextIdNumber = lastNumber + 1
     }
