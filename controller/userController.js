@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Wisata } = require('../models')
 
 //PROTECTED
 const getProtected = async(req, res) => {
@@ -30,7 +30,21 @@ const getAllUser = async(req,res) => {
     }
 }
 
+//GET WISATA BY USER
+const getListWisata = async(req,res) => {
+    try {
+        const wisata = await Wisata.findAll()
+        res.status(200).json({
+            message:"Data wisata berhasil diambil",
+            data: wisata
+        })
+    } catch (err) {
+        res.json({message:err.message})
+    }
+}
+
 module.exports = {
     getProtected,
-    getAllUser
+    getAllUser,
+    getListWisata
 }
