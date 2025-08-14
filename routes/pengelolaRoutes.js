@@ -28,5 +28,12 @@ router.get('/getWisata',
     verifyToken,
     pengelolaController.getWisata
 )
-
+router.patch('/updateWisata', 
+    verifyToken,
+    upload.fields([
+        {name: 'wisataImages', maxCount: 6},
+        {name: 'wisataImage', maxCount: 1}
+    ]), 
+    pengelolaController.updateWisata
+)
 module.exports = router
