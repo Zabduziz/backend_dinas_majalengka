@@ -60,6 +60,10 @@ module.exports = (sequelize, DataTypes) => {
         harga_tiket:{
             type: DataTypes.FLOAT,
             allowNull:false
+        },
+        url_gambar_utama:{
+            type: DataTypes.STRING,
+            allowNull:false
         }
     }, {
         sequelize,

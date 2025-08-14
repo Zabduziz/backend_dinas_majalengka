@@ -16,6 +16,17 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage:storage})
 
-router.post('/register', upload.array('wisataImages', 6), verifyToken, pengelolaController.registerWisata)
+router.post('/tambah-wisata', 
+    verifyToken, 
+    upload.fields([
+        {name: 'wisataImages', maxCount: 6},
+        {name: 'wisataImage', maxCount: 1}
+    ]), 
+    pengelolaController.registerWisata
+)
+router.get('/getWisata',
+    verifyToken,
+    pengelolaController.getWisata
+)
 
 module.exports = router

@@ -8,10 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     }
     GaleriWisata.init({
         id_galery_wisata:{
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull:false,
             unique:false,
-            primaryKey:true
+            primaryKey:true,
+            autoIncrement:true
         },
         id_wisata:{
             type: DataTypes.STRING,

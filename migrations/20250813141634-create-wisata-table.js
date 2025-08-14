@@ -57,6 +57,10 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull:false
       },
+      url_gambar_utama:{
+        type: Sequelize.STRING,
+        allowNull:false
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull:false,
