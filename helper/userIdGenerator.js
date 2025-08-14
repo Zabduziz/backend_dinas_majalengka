@@ -1,4 +1,4 @@
-const {User, Pengelola, Wisata} = require('../models')
+const {User, Pengelola, Wisata, GaleriWisata} = require('../models')
 
 //AUTOMATIC GENERATE USERID
 const generateUserId = async() => {
@@ -48,8 +48,24 @@ const generateWisataId = async() => {
     return `WST${formattedNumber}`
 }
 
+//AUTOMATIC GENERATE WISATAID
+const generateGaleriWisataId = async() => {
+    const lastUser = await GaleriWisata.findOne({
+        order: [['id_galery_wisata', 'DESC']]
+    })
+
+    let nextIdNumber = 1
+    if (lastUser) {
+        const lastId = lastUser.id_wisata
+        const lastNumber = parseInt(lastId.replace('GLR', ''), 10)
+        nextIdNumber = lastNumber + 1
+    }
+    const formattedNumber = String(nextIdNumber).padStart(4, '0')
+    return `GLR${formattedNumber}`
+}
 module.exports = {
     generateUserId,
     generatePengelolaId,
-    generateWisataId
+    generateWisataId,
+    generateGaleriWisataId
 }

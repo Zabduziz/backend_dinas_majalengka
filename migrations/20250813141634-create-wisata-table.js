@@ -13,6 +13,7 @@ module.exports = {
       id_pengelola:{
         type: Sequelize.STRING,
         allowNull:false,
+        unique:true,
         references:{
           model:'pengelola',
           key:'id_pengelola'

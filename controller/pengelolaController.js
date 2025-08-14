@@ -14,6 +14,13 @@ const registerWisata = async (req, res) => {
     try {
         const userId = req.user.id_user
         const pengelola = await Pengelola.findOne({where: {id_user: userId}})
+        if (!pengelola) {
+            return res.status(404).json({ message: "Data pengelola tidak ditemukan." });
+        }
+        const existingWisata = await Wisata.findOne({ where: { id_pengelola: pengelola.id_pengelola } });
+        if (existingWisata) {
+            return res.status(400).json({ message: "Pengelola ini sudah mendaftarkan satu tempat wisata." });
+        }
         const newWisataId = await idGenerator.generateWisataId()
         const wisata = await Wisata.create({
             id_wisata:newWisataId,
@@ -32,7 +39,9 @@ const registerWisata = async (req, res) => {
             harga_tiket: body.harga_tiket
         })
 
+        const newGaleriId = await idGenerator.generateGaleriWisataId()
         const galeriData = filesGambar.map(file => ({
+            id_galery_wisata: newGaleriId,
             id_wisata: wisata.id_wisata,
             url_gambar: file.path
         }))
@@ -44,7 +53,7 @@ const registerWisata = async (req, res) => {
             message: `${filesGambar.length} gambar berhasil ditambahkan ke galeri wisata`
         })
     } catch (err) {
-        res.json({message: err.message})
+        res.status(500).json({message: err.message})
     }
 }
 
