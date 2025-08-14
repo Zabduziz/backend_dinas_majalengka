@@ -53,4 +53,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName:'transaksi',
         timestamps:true
     })
+    return Transaksi
 }

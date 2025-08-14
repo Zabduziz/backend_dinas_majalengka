@@ -3,11 +3,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const authRoutes = require('./routes/authRoutes')
 const userRoutes = require('./routes/userRoutes')
+const pengelolaRoutes = require('./routes/pengelolaRoutes')
 const cors = require('cors')
 
 const app = express()
 const port = process.env.PORT || 5050
 
+app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(cors())
 
@@ -22,6 +24,9 @@ app.use('/auth', authRoutes)
 
 //USER
 app.use('/user', userRoutes)
+
+//PENGELOLA
+app.use('/pengelola', pengelolaRoutes)
 
 //INTENT TO GOOGLE MAP
 app.post('/get', (req,res) => {

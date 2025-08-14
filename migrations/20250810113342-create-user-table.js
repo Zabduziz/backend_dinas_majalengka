@@ -11,7 +11,7 @@ module.exports = {
       },
       id_role: {
         type: Sequelize.STRING,
-        allowNull:true,
+        allowNull:false,
         references: {
           model: 'roles',
           key: 'id_role'

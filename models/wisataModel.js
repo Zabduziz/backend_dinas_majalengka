@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             this.belongsTo(models.Pengelola, {foreignKey:'id_pengelola'})
             this.hasMany(models.Transaksi, {foreignKey:'id_wisata'})
+            this.hasMany(models.GaleriWisata, {foreignKey:'id_wisata'})
         }
     }
     Wisata.init({
@@ -40,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TIME,
             allowNull:false
         },
+        jam_terbaik:{
+            type: DataTypes.TIME,
+            allowNull:false
+        },
         coordinates:{
             type: DataTypes.GEOMETRY('POINT'),
             allowNull:false
@@ -62,4 +67,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName:'wisata',
         timestamps:true
     })
+    return Wisata
 }

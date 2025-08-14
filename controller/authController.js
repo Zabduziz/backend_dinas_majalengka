@@ -1,8 +1,8 @@
-const { User, Role_User, Role } = require('../models')
+const { User, Pengelola} = require('../models')
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const generateUserId = require('../helper/userIdGenerator')
+const idGenerator = require('../helper/userIdGenerator')
 const sequelize = require('sequelize')
 const transporter = require('../helper/email')
 
@@ -10,26 +10,64 @@ const SECRET_KEY = "rahasia-super-aman"
 
 //REGISTER
 const register = async(req, res) => {
-    const body = req.body;
-    const id_role = 'USR'
+    const body = req.body
     
     const hashedPassword = await bcrypt.hash(body.password_hash, 10);
     try {
-        const newUserId = await generateUserId()
+        const newUserId = await idGenerator.generateUserId()
         const user = await User.create({ 
             id_user:newUserId,
+            id_role: 'USR',
             nama_lengkap:body.nama_lengkap,
             email:body.email,
             tanggal_lahir:body.tanggal_lahir,
             no_telpon:body.no_telpon,
             gender:body.gender,
             password_hash:hashedPassword
-        });
-        const user_role = await Role_User.create({
-            id_user:user.id_user,
-            id_role:id_role
         })
-        res.json({ message: "Register berhasil", table_user: user, table_role:user_role });
+        res.json({ message: "Register berhasil", table_user: user});
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+//PENGELOLA
+//REGISTER
+const register_pengelola = async (req,res) => {
+    const body = req.body
+    const hashedPassword = await bcrypt.hash(body.password_hash, 10)
+    try {
+        const files = req.files
+        if (!files || !files.ktp || !files.npwp || !files.nib || !files.qr_code) {
+            return res.status(400).json({ message: 'Lengkapin semua dokumen dulu, bro.' });
+        }
+        const ktpUrl = files.ktp[0].path;
+        const npwpUrl = files.npwp[0].path;
+        const nibUrl = files.nib[0].path;
+        const qrCodeUrl = files.qr_code[0].path;
+    
+        const newUserId = await idGenerator.generateUserId()
+        const user = await User.create({ 
+            id_user:newUserId,
+            id_role: 'PNGL',
+            nama_lengkap:body.nama_lengkap,
+            email:body.email,
+            tanggal_lahir:body.tanggal_lahir,
+            no_telpon:body.no_telpon,
+            gender:body.gender,
+            password_hash:hashedPassword
+        })
+        const newPengelolaId = await idGenerator.generatePengelolaId()
+        const pengelola = await Pengelola.create({
+            id_pengelola:newPengelolaId,
+            id_user:user.id_user,
+            tahun_operasi:body.tahun_operasi,
+            url_ktp:ktpUrl,
+            url_npwp:npwpUrl,
+            url_nib:nibUrl,
+            qr_code:qrCodeUrl
+        })
+        res.json({message:"Register Pengelola Berhasi;", user: user, pengelola: pengelola})
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -41,14 +79,7 @@ const login = async(req, res) => {
     
     try {
         const user = await User.findOne({ 
-            where: { email },
-            include: [
-                {
-                    model: Role,
-                    through: {attributes:[]},
-                    as: 'roles'
-                }
-            ]
+            where: { email }
         });
         if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
     
@@ -57,7 +88,7 @@ const login = async(req, res) => {
     
         const payload = {
             id_user: user.id_user,
-            id_roles: user.roles[0].id_role,
+            id_role: user.id_role,
             nama_lengkap: user.nama_lengkap,
         }
 
@@ -90,7 +121,7 @@ const forgotPassword = async(req,res) => {
             html: `
                 <h3>Hello, ${user.nama_lengkap}</h3>
                 <p>You requested a password reset. Click the link below to reset your password:</p>
-                <a href="http://localhost:5173/reset-password?token=${token}">Reset Password</a>
+                <a href="http://localhost:5173/admin-panel/reset-password?token=${token}">Reset Password</a>
                 <p>This link will expire in a half hour.</p>
                 `,
         }
@@ -127,9 +158,11 @@ const resetPassword = async(req,res) => {
     }
 }
 
+
 module.exports = {
     register,
     login,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    register_pengelola
 }

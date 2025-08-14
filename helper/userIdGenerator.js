@@ -1,4 +1,4 @@
-const {User} = require('../models')
+const {User, Pengelola, Wisata} = require('../models')
 
 //AUTOMATIC GENERATE USERID
 const generateUserId = async() => {
@@ -16,4 +16,40 @@ const generateUserId = async() => {
     return `USR${formattedNumber}`
 }
 
-module.exports = generateUserId
+//AUTOMATIC GENERATE PENGELOLAID
+const generatePengelolaId = async() => {
+    const lastUser = await Pengelola.findOne({
+        order: [['id_pengelola', 'DESC']]
+    })
+
+    let nextIdNumber = 1
+    if (lastUser) {
+        const lastId = lastUser.id_pengelola
+        const lastNumber = parseInt(lastId.replace('PNGL', ''), 10)
+        nextIdNumber = lastNumber + 1
+    }
+    const formattedNumber = String(nextIdNumber).padStart(4, '0')
+    return `PNGL${formattedNumber}`
+}
+
+//AUTOMATIC GENERATE WISATAID
+const generateWisataId = async() => {
+    const lastUser = await Wisata.findOne({
+        order: [['id_wisata', 'DESC']]
+    })
+
+    let nextIdNumber = 1
+    if (lastUser) {
+        const lastId = lastUser.id_wisata
+        const lastNumber = parseInt(lastId.replace('WST', ''), 10)
+        nextIdNumber = lastNumber + 1
+    }
+    const formattedNumber = String(nextIdNumber).padStart(4, '0')
+    return `WST${formattedNumber}`
+}
+
+module.exports = {
+    generateUserId,
+    generatePengelolaId,
+    generateWisataId
+}

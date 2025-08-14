@@ -36,6 +36,10 @@ module.exports = {
         type: Sequelize.TIME,
         allowNull:false
       },
+      jam_terbaik:{
+        type: Sequelize.TIME,
+        allowNull:false
+      },
       coordinates:{
         type: Sequelize.GEOMETRY('POINT'),
         allowNull:false
