@@ -27,6 +27,8 @@
     "mysql2": "^3.14.3",
     "nodemailer": "^7.0.5",
     "pdfkit": "^0.17.2",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
     "qrcode": "^1.5.4",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3",
